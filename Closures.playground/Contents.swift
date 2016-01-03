@@ -121,7 +121,7 @@ let totalProjection = projectedPopulations.reduce(0) {
 }
 
 // Gold Challenge
-
+//let smallProjection =
 
 
 
