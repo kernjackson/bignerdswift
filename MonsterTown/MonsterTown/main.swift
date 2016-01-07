@@ -48,3 +48,6 @@ let duckula = Vampire()
 duckula.town = bavarianVillage
 duckula.terrorizeTown()
 duckula.town?.printTownDescription()
+
+// For the more curious: Type Methods
+let sppokyNoise = Zombie.makeSpookyNoise() // "Brains..."

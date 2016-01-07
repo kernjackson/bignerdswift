@@ -12,6 +12,11 @@ import Foundation
 class Zombie: Monster {
     var walksWithLimp = true
     
+    // For the more curious: Type Methods
+    class func makeSpookyNoise() -> String {
+        return "Brains..."
+    }
+    
     // 15.13 final prevents subclasses from overriding this func
     final override func terrorizeTown() {
         if town?.population < 11 {

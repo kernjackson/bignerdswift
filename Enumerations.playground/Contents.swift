@@ -213,6 +213,13 @@ var rightTriangleShape = ShapeDimensions.RightTriangle(base: 4, height: 3, hypot
 print("right triangle's area = \(rightTriangleShape.area())")
 print("right triangle's perimeter = \(rightTriangleShape.perimeter())")
 
+// For the more curious: Type Methods
+struct Square {
+    static func numberOfSides() -> Int {
+        return 4
+    }
+}
+let sides = Square.numberOfSides() // sides is 4
 
 
 
