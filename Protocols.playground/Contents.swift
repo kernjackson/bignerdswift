@@ -34,8 +34,10 @@ func padding(amount: Int) -> String {
     return paddingString
 }
 
+// L 19.12 Making TabularDataSource inherit from CustomString Convertable
+protocol TabularDataSource : CustomStringConvertible {
 // L 19.5 Defining a Protocol
-protocol TabularDataSource {
+//protocol TabularDataSource {
     // this doesn't prevent set, it just requires getting for conformance
     var numberOfRows: Int { get }
     var numberOfColumns: Int { get }
@@ -49,6 +51,9 @@ protocol TabularDataSource {
 //func printTable(rowLabels: [String], columnLabels: [String], data: [[Int]]) {
 // L 19.8 Making printTqble(_:) take a TabularDataSource
 func printTable(dataSource: TabularDataSource) {
+    // 19.13
+    print("Table: \(dataSource.description)")
+    
     // Create arrays of the row and column labels
     let rowLabels = (0 ..< dataSource.numberOfRows).map { dataSource.labelForRow($0) }
     let columnLabels = (0 ..< dataSource.numberOfColumns).map {
@@ -179,6 +184,6 @@ department.addPerson(Person(name: "Fred", age: 50, yearsOfExperience: 20))
 
 // 19.9 Printing department
 printTable(department)
-print(department)
+// L 19.13 print(department)
 
 
