@@ -34,7 +34,26 @@ func padding(amount: Int) -> String {
     return paddingString
 }
 
-func printTable(rowLabels: [String], columnLabels: [String], data: [[Int]]) {
+// L 19.5 Defining a Protocol
+protocol TabularDataSource {
+    // this doesn't prevent set, it just requires getting for conformance
+    var numberOfRows: Int { get }
+    var numberOfColumns: Int { get }
+    
+    func labelForRow(row: Int) -> String
+    func labelForColumn(column: Int) -> String
+    
+    func itemForRow(row: Int, column: Int) -> Int
+}
+
+//func printTable(rowLabels: [String], columnLabels: [String], data: [[Int]]) {
+// L 19.8 Making printTqble(_:) take a TabularDataSource
+func printTable(dataSource: TabularDataSource) {
+    // Create arrays of the row and column labels
+    let rowLabels = (0 ..< dataSource.numberOfRows).map { dataSource.labelForRow($0) }
+    let columnLabels = (0 ..< dataSource.numberOfColumns).map {
+        dataSource.labelForColumn($0)
+    }
 
     // Create an array of the width of each row label
     let rowLabelWidths = rowLabels.map { $0.characters.count }
@@ -59,7 +78,8 @@ func printTable(rowLabels: [String], columnLabels: [String], data: [[Int]]) {
     }
     print(firstRow)
     
-    for (i, row) in data.enumerate() {
+//    for (i, row) in data.enumerate() {
+    for i in 0 ..< dataSource.numberOfRows {
         // Pad the row label out so they are all the same length
         let paddingAmount = maxRowLabelWidth - rowLabelWidths[i]
         var out = rowLabels[i] + padding(paddingAmount) + " |"
@@ -70,7 +90,10 @@ func printTable(rowLabels: [String], columnLabels: [String], data: [[Int]]) {
 //        }
         
         // 19.3
-        for (j, item) in row.enumerate() {
+//        for (j, item) in row.enumerate() {
+        // 19.8
+        for j in 0 ..< dataSource.numberOfColumns {
+            let item = dataSource.itemForRow(i, column: j)
             let itemString = " \(item) |"
             let paddingAmount = columnWidths[j] - itemString.characters.count
             out += padding(paddingAmount) + itemString
@@ -81,15 +104,81 @@ func printTable(rowLabels: [String], columnLabels: [String], data: [[Int]]) {
     }
 }
 
-let rowLabels = ["Joe", "Karen", "Fred"]
-let columnLabels = ["Age", "Years of Experience"]
-let data = [
-    [30, 6],
-    [40, 18],
-    [50, 20],
-]
+// L 19.4 Using model objects
+//let rowLabels = ["Joe", "Karen", "Fred"]
+//let columnLabels = ["Age", "Years of Experience"]
+//let data = [
+//    [30, 6],
+//    [40, 18],
+//    [50, 20],
+//]
+//
+//printTable(rowLabels, columnLabels:  columnLabels, data: data)
 
-printTable(rowLabels, columnLabels:  columnLabels, data: data)
+struct Person {
+    let name: String
+    let age: Int
+    let yearsOfExperience: Int
+}
 
+
+
+// L 19.6 Declaring that Department conforms to TabularDataSource
+struct Department: TabularDataSource {
+    let name: String
+    var people = [Person]()
+    
+    // 19.10 Conforming to CustomStringConvertable
+    var description: String {
+        return "Department (\(name)"
+    }
+    
+    init(name: String) {
+        self.name = name
+    }
+    
+    mutating func addPerson(person: Person) {
+        people.append(person)
+    }
+    
+    var numberOfRows: Int {
+        return people.count
+    }
+    
+    var numberOfColumns: Int {
+        return 2
+    }
+    
+    func labelForRow(row: Int) -> String {
+        return people[row].name
+    }
+    
+    func labelForColumn(column: Int) -> String {
+        switch column {
+        case 0: return "Age"
+        case 1: return "Years of Experience"
+        default: fatalError("Invalid column")
+        }
+    }
+    
+    func itemForRow(row: Int, column: Int) -> Int {
+        let person = people[row]
+        switch column {
+        case 0: return person.age
+        case 1: return person.yearsOfExperience
+        default: fatalError("Invalid column!")
+        }
+    }
+    
+}
+
+var department = Department(name: "Engineering")
+department.addPerson(Person(name: "Joe", age: 30, yearsOfExperience: 6))
+department.addPerson(Person(name: "Karen", age: 40, yearsOfExperience: 18))
+department.addPerson(Person(name: "Fred", age: 50, yearsOfExperience: 20))
+
+// 19.9 Printing department
+printTable(department)
+print(department)
 
 
