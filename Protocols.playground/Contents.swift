@@ -34,8 +34,10 @@ func padding(amount: Int) -> String {
     return paddingString
 }
 
+// L 19.14 Protocol Compositioin TabularDataSource should not be CustomStringConvertable
+protocol TabularDataSource {
 // L 19.12 Making TabularDataSource inherit from CustomString Convertable
-protocol TabularDataSource : CustomStringConvertible {
+//protocol TabularDataSource : CustomStringConvertible {
 // L 19.5 Defining a Protocol
 //protocol TabularDataSource {
     // this doesn't prevent set, it just requires getting for conformance
@@ -50,7 +52,9 @@ protocol TabularDataSource : CustomStringConvertible {
 
 //func printTable(rowLabels: [String], columnLabels: [String], data: [[Int]]) {
 // L 19.8 Making printTqble(_:) take a TabularDataSource
-func printTable(dataSource: TabularDataSource) {
+//func printTable(dataSource: TabularDataSource) {
+// L 19.15 Making printTable's argument conform to CustomStringConvertable
+func printTable(dataSource: protocol<TabularDataSource, CustomStringConvertible>) {
     // 19.13
     print("Table: \(dataSource.description)")
     
@@ -183,7 +187,31 @@ department.addPerson(Person(name: "Karen", age: 40, yearsOfExperience: 18))
 department.addPerson(Person(name: "Fred", age: 50, yearsOfExperience: 20))
 
 // 19.9 Printing department
-printTable(department)
+//printTable(department) // :( not sure how to call it now, and the book doesn't say
+print(department)
 // L 19.13 print(department)
 
+// Mutating Methods
+protocol Toggleable {
+    mutating func toggle()
+}
+
+enum Lightbulb: Toggleable {
+    case On
+    case Off
+    
+    mutating func toggle() {
+        switch self {
+        case .On:
+            self = .Off
+        case .Off:
+            self = .On
+        }
+    }
+}
+
+// Silver Challenge
+printTable
+
+// Gold Challenge
 
