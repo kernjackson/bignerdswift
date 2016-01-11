@@ -157,6 +157,12 @@ class Parser {
 func evaluate(input: String) {
     print("Evaluating: \(input)")
     let lexer = Lexer(input: input)
+//    let tokens = try! lexer.lex()
+    // L 20.22 Using try? in evaluate(_:)
+//    guard let tokens = try? lexer.lex() else {
+//        print("Lexing failed, but I don't know why")
+//        return
+//    }
     
     do {
         let tokens = try lexer.lex()
@@ -175,13 +181,14 @@ func evaluate(input: String) {
     } catch Parser.Error.InvalidToken(let token) {
         print("Invalid token during parsing: \(token)")
     } catch {
+        // L 20.24 Avoid handling unkown ErrorTypes in evaluate(_:)
         print("An error occurred: \(error)")
     }
 }
 
 evaluate("10 + 3 + 5")
 // L 20.13 Removing bad input
-//evaluate("1 + 2 + abcdefg")
+evaluate("1 + 2 + abcdefg")
 
 evaluate("10 - 3 - 5")
 
