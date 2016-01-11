@@ -188,6 +188,7 @@ department.addPerson(Person(name: "Fred", age: 50, yearsOfExperience: 20))
 
 // 19.9 Printing department
 //printTable(department) // :( not sure how to call it now, and the book doesn't say
+//printTable(TabularDataSource)
 print(department)
 // L 19.13 print(department)
 
