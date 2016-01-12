@@ -8,6 +8,7 @@ import Cocoa
 enum Token {
     case Number(Int)
     case Plus
+    case Minus
 }
 
 // L 20.2  Creating a Lexer
@@ -53,6 +54,9 @@ class Lexer {
                 tokens.append(.Number(value))
             case "+":
             tokens.append(.Plus)
+                advance()
+            case "-":
+                tokens.append(.Minus)
                 advance()
             case " ":
             // Just advance to ignore spaces
@@ -123,7 +127,7 @@ class Parser {
         switch token {
         case .Number(let value):
             return value
-        case .Plus:
+        case .Plus, .Minus:
             throw Error.InvalidToken(token)
         }
     }
@@ -141,6 +145,11 @@ class Parser {
                 // After a plus, we must get another number
                 let nextNumber = try getNumber()
                 value += nextNumber
+            
+            case .Minus:
+                // Bronze Challenge
+                let nextNumber = try getNumber()
+                value -= nextNumber
                 
                 // Getting a Number after a Number is not legal
             case .Number:
@@ -190,7 +199,7 @@ evaluate("10 + 3 + 5")
 // L 20.13 Removing bad input
 evaluate("1 + 2 + abcdefg")
 
-evaluate("10 - 3 - 5")
+evaluate("10 - 3 - 5 - 1")
 
 
 
