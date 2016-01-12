@@ -41,7 +41,7 @@ class Lexer {
         ++position
     }
     
-    // L 20.6 Declaring the trhowing lex() method
+    // L 20.6 Declaring the throwing lex() method
     func lex() throws -> [Token] {
         var tokens = [Token]()
         
@@ -184,7 +184,7 @@ func evaluate(input: String) {
         
         // L 20.12 Catching an Invalid Character error
     } catch Lexer.Error.InvalidCharacter(let character) {
-        print("Input contained an invalid character: \(character)")
+        print("Input contained an invalid character at index \(index): \(character) ")
     } catch Parser.Error.UnexpectedEndOfInput {
         print("Unexpected end of input during parsing")
     } catch Parser.Error.InvalidToken(let token) {
@@ -199,7 +199,17 @@ evaluate("10 + 3 + 5")
 // L 20.13 Removing bad input
 evaluate("1 + 2 + abcdefg")
 
-evaluate("10 - 3 - 5 - 1")
+// Bronze Challenge
+evaluate("10 + 5 - 3 - 1")
+
+// Silver Challenge
+evaluate("1 + 3 + 7a + 8")
+evaluate("10 + 3 3 + 7")
+
+// Gold Challenge
+evaluate("10 * 3 + 5 * 3") // 45
+evaluate("10 + 3 * 5 + 3") // 28
+evaluate("10 + 3 * 5 * 3") // 55
 
 
 
